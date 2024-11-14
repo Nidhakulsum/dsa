@@ -1,0 +1,39 @@
+// Online C compiler to run C program online
+#include <stdio.h>
+#include<string.h>
+
+char stack[100];
+int top=-1;
+void push(char ch){
+    top=top+1;
+    stack[top]=ch;
+}
+char pop(){
+    char c;
+    c=stack[top];
+    top=top-1;
+    return c;
+}
+int main() {
+  char string[50];
+  printf("enter srring");
+  scanf("%s",string);
+  int len=strlen(string);
+  int count=0;
+  for (int i=0; i<len; i++){
+      push(string[i]);
+  }
+  for(int i=0;i<len; i++){
+      if(string[i]==pop()){
+          count++;
+      }
+  }
+  if(len==count){
+      printf("palendrone");
+    
+  }
+  else{
+      printf("not");
+  }
+    return 0;
+} 

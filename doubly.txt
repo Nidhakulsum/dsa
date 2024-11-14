@@ -1,0 +1,142 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Definition of a doubly linked list node
+struct Node {
+int data;
+struct Node *prev;
+struct Node *next;
+};
+
+// Function to insert a node at the front of the list
+void insertAtFront(struct Node **head, int value) {
+struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+if (newNode == NULL) {
+printf("Memory allocation error\n");
+return;
+}
+
+newNode->data = value;
+newNode->prev = NULL;
+
+if (*head == NULL) {
+newNode->next = NULL; // If the list is empty, next is NULL
+*head = newNode; // Make newNode the head
+} else {
+newNode->next = *head; // Link newNode to the current head
+(*head)->prev = newNode; // Update the previous head's prev pointer
+*head = newNode; // Move head to point to newNode
+}
+}
+
+// Function to insert a node to the left of a node with a specific key value
+void insertLeft(struct Node **head, int key, int value) {
+struct Node *current = *head;
+
+while (current != NULL) {
+if (current->data == key) {
+struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+if (newNode == NULL) {
+printf("Memory allocation error\n");
+return;
+}
+newNode->data = value;
+newNode->next = current; // Link newNode to current
+newNode->prev = current->prev; // Link newNode to current's prev
+
+if (current->prev != NULL) {
+current->prev->next = newNode; // Update previous node's next pointer
+} else {
+*head = newNode; // Update head if current was the first node
+}
+current->prev = newNode; // Link current's prev to newNode
+return;
+}
+current = current->next;
+}
+printf("Node with key %d not found.\n", key);
+}
+
+// Function to delete a node with a specific value
+void deleteNode(struct Node **head, int value) {
+struct Node *current = *head;
+
+while (current != NULL) {
+if (current->data == value) {
+if (current->prev != NULL) {
+current->prev->next = current->next; // Link previous node to next node
+} else {
+*head = current->next; // Update head if deleting the first node
+}
+if (current->next != NULL) {
+current->next->prev = current->prev; // Link next node to previous node
+}
+free(current); // Free the memory allocated for the node
+return;
+}
+current = current->next;
+}
+printf("Node with value %d not found.\n", value);
+}
+
+// Function to display the contents of the list
+void displayList(struct Node *head) {
+struct Node *current = head;
+if (current == NULL) {
+printf("Doubly Linked List is empty.\n");
+return;
+}
+printf("Doubly Linked List: ");
+while (current != NULL) {
+printf("%d <-> ", current->data);
+current = current->next;
+}
+printf("NULL\n");
+}
+
+// Main function to demonstrate the operations
+int main() {
+struct Node *head = NULL; // Initialize head to NULL
+int choice, value, key;
+
+while (1) {
+printf("\nMenu:\n");
+printf("1. Insert at Front\n");
+printf("2. Insert Left of a Node\n");
+printf("3. Delete a Node\n");
+printf("4. Display List\n");
+printf("5. Exit\n");
+
+printf("Enter your choice: ");
+scanf("%d", &choice);
+
+switch (choice) {
+case 1:
+printf("Enter value to insert at front: ");
+scanf("%d", &value);
+insertAtFront(&head, value);
+break;
+case 2:
+printf("Enter the key value to insert left of: ");
+scanf("%d", &key);
+printf("Enter value to insert: ");
+scanf("%d", &value);
+insertLeft(&head, key, value);
+break;
+case 3:
+printf("Enter value to delete: ");
+scanf("%d", &value);
+deleteNode(&head, value);
+break;
+case 4:
+displayList(head);
+break;
+case 5:
+printf("Exiting program.\n");
+return 0;
+default:
+printf("Invalid choice. Please try again.\n");
+}
+}
+return 0;
+}

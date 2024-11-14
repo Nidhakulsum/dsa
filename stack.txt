@@ -1,0 +1,88 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 100  // Define a maximum fixed size for the stack
+
+int stack[MAX];  // Array to store stack elements
+int top = -1;    // Index of the top element
+
+// Function to push an element onto the stack
+void push(int value) {
+    if (top == MAX - 1) {  // Check if the stack is full
+        printf("Stack Overflow\n");
+        return;
+    }
+    stack[++top] = value;  // Increment top and add the element
+    printf("Pushed %d onto the stack\n", value);
+}
+
+// Function to pop an element from the stack
+void pop() {
+    if (top == -1) {  // Check if the stack is empty
+        printf("Stack Underflow\n");
+        return;
+    }
+    printf("Popped element is %d\n", stack[top--]);  // Display and decrement top
+}
+
+// Function to peek at the top element of the stack without removing it
+void peek() {
+    if (top == -1) {  // Check if the stack is empty
+        printf("Stack is empty\n");
+        return;
+    }
+    printf("Top element is %d\n", stack[top]);
+}
+
+// Function to display all elements in the stack
+void display() {
+    if (top == -1) {  // Check if the stack is empty
+        printf("Stack is empty\n");
+        return;
+    }
+    printf("Stack elements: ");
+    for (int i = 0; i <= top; i++) {  // Display all elements
+        printf("%d ", stack[i]);
+    }
+    printf("\n");
+}
+
+// Main function with a menu for stack operations
+int main() {
+    int choice, value;
+
+    while (1) {
+        printf("\nChoose an operation:\n");
+        printf("1. Push\n");
+        printf("2. Pop\n");
+        printf("3. Peek\n");
+        printf("4. Display\n");
+        printf("5. Exit\n");
+        printf("Enter your choice: ");
+         scanf("%d",&choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter the value to push: ");
+                scanf("%d",&value);
+                push(value);
+                break;
+            case 2:
+                pop();
+                break;
+            case 3:
+                peek();
+                break;
+            case 4:
+                display();
+                break;
+            case 5:
+                printf("Exiting...\n");
+                exit(0);  // Exit the program
+            default:
+                printf("Invalid choice, please try again.\n");
+        }
+    }
+
+    return 0;
+}

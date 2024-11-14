@@ -1,0 +1,154 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define a structure for a linked list node
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+// Function to insert at the front of the list
+struct Node* insertAtFront(struct Node* head, int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    if (newNode == NULL) {
+        printf("Memory allocation failed\n");
+        exit(1);
+    }
+    newNode->data = data;
+    newNode->next = head;
+    return newNode;
+}
+
+// Function to insert at a specific position in the list
+struct Node* insertAtPosition(struct Node* head, int data, int position) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    if (newNode == NULL) {
+        printf("Memory allocation failed\n");
+        exit(1);
+    }
+    newNode->data = data;
+
+    if (position == 1) {
+        newNode->next = head;
+        return newNode;
+    }
+
+    struct Node* temp = head;
+    for (int i = 1; i < position - 1 && temp != NULL; i++) {
+        temp = temp->next;
+    }
+
+    if (temp == NULL) {
+        printf("Position out of bounds\n");
+        free(newNode);
+        return head;
+    }
+
+    newNode->next = temp->next;
+    temp->next = newNode;
+    return head;
+}
+
+// Function to delete a node based on a specified value
+struct Node* deleteNode(struct Node* head, int value) {
+    struct Node* temp = head;
+    struct Node* prev = NULL;
+
+    if (temp != NULL && temp->data == value) {
+        head = temp->next;
+        free(temp);
+        return head;
+    }
+
+    while (temp != NULL && temp->data != value) {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    if (temp == NULL) {
+        printf("Value not found in the list\n");
+        return head;
+    }
+
+    prev->next = temp->next;
+    free(temp);
+    return head;
+}
+
+// Function to search for a node based on a specified value
+void searchNode(struct Node* head, int value) {
+    struct Node* temp = head;
+    int position = 1;
+    while (temp != NULL) {
+        if (temp->data == value) {
+            printf("Value %d found at position %d\n", value, position);
+            return;
+        }
+        temp = temp->next;
+        position++;
+    }
+    printf("Value %d not found in the list\n", value);
+}
+
+// Function to display all nodes in the list
+void displayList(struct Node* head) {
+    struct Node* temp = head;
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+// Main function to test the linked list operations
+int main() {
+    struct Node* head = NULL;
+    int choice, data, position, value;
+
+    while (1) {
+        printf("\nMenu:\n");
+        printf("1. Insert at front\n");
+        printf("2. Insert at position\n");
+        printf("3. Delete a node\n");
+        printf("4. Search for a node\n");
+        printf("5. Display the list\n");
+        printf("6. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter data to insert at front: ");
+                scanf("%d", &data);
+                head = insertAtFront(head, data);
+                break;
+            case 2:
+                printf("Enter data to insert: ");
+                scanf("%d", &data);
+                printf("Enter position to insert at: ");
+                scanf("%d", &position);
+                head = insertAtPosition(head, data, position);
+                break;
+            case 3:
+                printf("Enter value to delete: ");
+                scanf("%d", &value);
+                head = deleteNode(head, value);
+                break;
+            case 4:
+                printf("Enter value to search: ");
+                scanf("%d", &value);
+                searchNode(head, value);
+                break;
+            case 5:
+                printf("Linked list: ");
+                displayList(head);
+                break;
+            case 6:
+                exit(0);
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    }
+
+    return 0;
+}
